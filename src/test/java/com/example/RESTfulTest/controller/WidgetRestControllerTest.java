@@ -106,6 +106,21 @@ class WidgetRestControllerTest {
                 .andExpect(jsonPath("$.version", is(1)));
     }
 
+    @Test
+    @DisplayName("GET /rest/widget/1 ")
+    void testGetWidgetById() throws Exception {
+        // Setup our mocked service
+        Optional<Widget> widget = Optional.of(new Widget(1L, "My widget", "toGet" , 2 ));
+
+        doReturn(widget).when(service).findById(1L);
+
+        // Execute the GET request
+        mockMvc.perform(get("/rest/widget/{id}", 1L))
+                // Validate the response code
+                .andExpect(status().isOk());
+    }
+
+
 
     static String asJsonString(final Object obj) {
         try {
