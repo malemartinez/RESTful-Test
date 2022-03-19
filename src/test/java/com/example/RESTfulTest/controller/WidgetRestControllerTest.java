@@ -133,10 +133,20 @@ class WidgetRestControllerTest {
                         .content(asJsonString(widget2))
                         .header(HttpHeaders.IF_MATCH, "2"))
                 .andExpect(status().isOk());
+    }
 
+    @Test
+    @DisplayName("PUT / rest / widget / 1")
+    void testPutWidgetByIdNotFound() throws Exception{
+        // Setup our mocked service
+        Optional<Widget> widget = Optional.of(new Widget(2L, "My widget", "toGet" , 2 ));
+        doReturn(Optional.empty()).when(service).findById(2L);
 
-
-
+        mockMvc.perform(put("/rest/widget/{id}",2L)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(asJsonString(widget))
+                        .header(HttpHeaders.IF_MATCH, "2"))
+                .andExpect(status().isNotFound());
     }
 
 
