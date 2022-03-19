@@ -119,6 +119,26 @@ class WidgetRestControllerTest {
                 // Validate the response code
                 .andExpect(status().isOk());
     }
+    @Test
+    @DisplayName("PUT / rest / widget / 1")
+    void testPutWidgetById() throws Exception{
+        // Setup our mocked service
+        Optional<Widget> widget = Optional.of(new Widget(1L, "My widget", "toGet" , 2 ));
+        Widget widget2 = new Widget(2L, "My widget2", "ToPost", 3);
+        doReturn(widget).when(service).findById(1L);
+        doReturn(widget2).when(service).save(any());
+
+        mockMvc.perform(put("/rest/widget/{id}",1L)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(asJsonString(widget2))
+                        .header(HttpHeaders.IF_MATCH, "2"))
+                .andExpect(status().isOk());
+
+
+
+
+    }
+
 
 
 
